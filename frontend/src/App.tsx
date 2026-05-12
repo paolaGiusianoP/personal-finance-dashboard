@@ -3,6 +3,8 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Transactions from './pages/Transactions';
+import Categories from './pages/Categories';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
@@ -28,6 +30,16 @@ function AppRoutes() {
       <Route path="/dashboard" element={
         <PrivateRoute>
           <Dashboard />
+        </PrivateRoute>
+      } />
+      <Route path="/transactions" element={
+        <PrivateRoute>
+          <Transactions />
+        </PrivateRoute>
+      } />
+      <Route path="/categories" element={
+        <PrivateRoute>
+          <Categories />
         </PrivateRoute>
       } />
       <Route path="/" element={<Navigate to="/dashboard" />} />
