@@ -97,7 +97,7 @@ const DashboardTransactions: React.FC<DashboardTransactionsProps> = ({
       </div>
 
       <Link
-        to="/transactions/new"
+        to="/transactions"
         className="mt-6 flex items-center justify-center rounded-2xl bg-blue-500 py-3 font-semibold text-white transition-all hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/20"
       >
         + Agregar Transacción

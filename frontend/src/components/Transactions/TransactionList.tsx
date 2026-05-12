@@ -7,9 +7,13 @@ import type { Category, Transaction, TransactionFormData, Filters } from '../../
 
 interface TransactionListProps {
   onTransactionChange?: () => void;
+  limit?: number; 
 }
 
-const TransactionList: React.FC<TransactionListProps> = ({ onTransactionChange }) => {
+const TransactionList: React.FC<TransactionListProps> = ({ 
+  onTransactionChange, 
+  limit 
+}) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -129,6 +133,8 @@ const TransactionList: React.FC<TransactionListProps> = ({ onTransactionChange }
     return new Date(date).toLocaleDateString('es-ES');
   };
 
+  const displayTransactions = limit ? transactions.slice(0, limit) : transactions;
+
   return (
     <>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
@@ -144,18 +150,20 @@ const TransactionList: React.FC<TransactionListProps> = ({ onTransactionChange }
         </button>
       </div>
 
-      <TransactionFilters
-        filters={filters}
-        categories={categories}
-        onFilterChange={setFilters}
-        onClearFilters={() =>
-          setFilters({ type: '', categoryId: '', startDate: '', endDate: '' })
-        }
-      />
+      {!limit && (
+        <TransactionFilters
+          filters={filters}
+          categories={categories}
+          onFilterChange={setFilters}
+          onClearFilters={() =>
+            setFilters({ type: '', categoryId: '', startDate: '', endDate: '' })
+          }
+        />
+      )}
 
       <div className="bg-slate-900/80 border border-slate-800 rounded-3xl overflow-hidden backdrop-blur-xl">
         <TransactionTable
-          transactions={transactions}
+          transactions={displayTransactions} 
           onEdit={handleEdit}
           onDelete={handleDelete}
           loading={loading}
