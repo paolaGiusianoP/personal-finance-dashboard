@@ -17,6 +17,7 @@ model User {
   
   transactions Transaction[]
   categories    Category[]
+  sessions      Session[]  
 }
 
 model Category {
@@ -45,4 +46,18 @@ model Transaction {
   category    Category @relation(fields: [categoryId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([token])
+  @@index([userId])
+  @@index([expiresAt])
 }
