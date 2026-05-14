@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import toast from 'react-hot-toast';
 
 const UserMenu = () => {
   const { user, logout } = useAuth();
@@ -16,6 +17,12 @@ const UserMenu = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleLogout = () => {
+    setIsOpen(false);
+    logout();
+    toast.success('Sesión cerrada exitosamente');
+  };
 
   return (
     <div className="relative" ref={menuRef}>
@@ -90,12 +97,12 @@ const UserMenu = () => {
               <span className="text-lg">👤</span>
               Mi Perfil
             </Link>
+
+            {/* Separador */}
             <div className="border-t border-slate-800 my-2" />
+            {/* Cerrar Sesión */}
             <button
-              onClick={() => {
-                setIsOpen(false);
-                logout();
-              }}
+              onClick={handleLogout}
               className="flex items-center gap-3 w-full px-3 py-2 text-sm text-red-400 rounded-xl hover:bg-red-500/10 transition"
             >
               <span className="text-lg">🚪</span>

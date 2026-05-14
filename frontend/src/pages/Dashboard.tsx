@@ -6,6 +6,7 @@ import { TransactionList } from '../components/Transactions';
 import UserMenu from '../components/Layout/UserMenu';
 import DashboardCharts from '../components/Dashboard/DashboardCharts';
 import { exportSummaryToCSV } from '../utils/exportToCSV';
+import toast from 'react-hot-toast';
 
 interface Summary {
   income: number;
@@ -84,6 +85,7 @@ const Dashboard = () => {
       setMonthlyData(monthlyDataArray);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
+      toast.error('Error al cargar los datos del dashboard');
     } finally {
       setLoading(false);
     }
@@ -98,10 +100,12 @@ const Dashboard = () => {
 
   const handleTransactionChange = () => {
     fetchData();
+    toast.success('Datos actualizados', { icon: '🔄' });
   };
 
   const handleExportSummary = () => {
     exportSummaryToCSV(summary);
+    toast.success('Resumen exportado correctamente', { icon: '📥' });
   };
 
   return (

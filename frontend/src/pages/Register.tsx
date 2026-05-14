@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -18,11 +19,17 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      return setError('Las contraseñas no coinciden');
+      const msg = 'Las contraseñas no coinciden';
+      setError(msg);
+      toast.error(msg);
+      return;
     }
 
     if (password.length < 6) {
-      return setError('La contraseña debe tener al menos 6 caracteres');
+      const msg = 'La contraseña debe tener al menos 6 caracteres';
+      setError(msg);
+      toast.error(msg);
+      return;
     }
 
     try {
@@ -30,10 +37,15 @@ const Register = () => {
       setError('');
 
       await register(email, password, name);
-
+      
+      toast.success('¡Cuenta creada exitosamente!');
+      toast.success('Bienvenido a Finance Dashboard');
+      
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Error al registrar usuario');
+      const errorMessage = err.response?.data?.error || 'Error al registrar usuario';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

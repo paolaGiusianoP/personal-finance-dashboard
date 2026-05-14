@@ -5,6 +5,7 @@ import api from '../services/api';
 import { TransactionList } from '../components/Transactions';
 import UserMenu from '../components/Layout/UserMenu';
 import { exportTransactionsToCSV, exportSummaryToCSV } from '../utils/exportToCSV';
+import toast from 'react-hot-toast';
 
 interface Transaction {
   id: string;
@@ -46,6 +47,7 @@ const Transactions = () => {
       setSummary(summaryRes.data.data);
     } catch (error) {
       console.error('Error fetching data:', error);
+      toast.error('Error al cargar las transacciones');
     } finally {
       setLoading(false);
     }
@@ -53,14 +55,16 @@ const Transactions = () => {
 
   const handleExportTransactions = () => {
     if (allTransactions.length === 0) {
-      alert('No hay transacciones para exportar');
+      toast.error('No hay transacciones para exportar');
       return;
     }
     exportTransactionsToCSV(allTransactions, 'mis_transacciones');
+    toast.success(`${allTransactions.length} transacciones exportadas`, { icon: '📄' });
   };
 
   const handleExportSummary = () => {
     exportSummaryToCSV(summary);
+    toast.success('Resumen exportado correctamente', { icon: '📊' });
   };
 
   return (

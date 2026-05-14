@@ -7,6 +7,7 @@ import BudgetCard from '../components/Budgets/BudgetCard';
 import BudgetModal from '../components/Budgets/BudgetModal';
 import { getBudgets, createOrUpdateBudget, deleteBudget, getBudgetAlerts } from '../services/budgetService';
 import type { Budget, BudgetAlert } from '../services/budgetService';
+import toast from 'react-hot-toast';
 
 const Budgets = () => {
   const { user } = useAuth();
@@ -36,6 +37,7 @@ const Budgets = () => {
       setAlerts(alertsRes);
     } catch (error) {
       console.error('Error fetching budgets:', error);
+      toast.error('Error al cargar los presupuestos');
     } finally {
       setLoading(false);
     }
@@ -49,20 +51,30 @@ const Budgets = () => {
   };
 
   const handleSaveBudget = async (data: { categoryId: string; amount: number }) => {
-    await createOrUpdateBudget({
-      ...data,
-      month: selectedMonth,
-      year: selectedYear,
-    });
-    setShowModal(false);
-    setEditingBudget(null);
-    fetchData();
+    try {
+      await createOrUpdateBudget({
+        ...data,
+        month: selectedMonth,
+        year: selectedYear,
+      });
+      toast.success(editingBudget ? 'Presupuesto actualizado' : 'Presupuesto creado');
+      setShowModal(false);
+      setEditingBudget(null);
+      fetchData();
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || 'Error al guardar el presupuesto');
+    }
   };
 
   const handleDeleteBudget = async (id: string) => {
-    if (window.confirm('¿Eliminar este presupuesto?')) {
+    if (!window.confirm('¿Eliminar este presupuesto?')) return;
+    
+    try {
       await deleteBudget(id);
+      toast.success('Presupuesto eliminado');
       fetchData();
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || 'Error al eliminar el presupuesto');
     }
   };
 

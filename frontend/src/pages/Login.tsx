@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -18,11 +19,12 @@ const Login = () => {
       setLoading(true);
       setError('');
       await login(email, password);
+      toast.success('¡Bienvenido de vuelta!');
       navigate('/dashboard');
     } catch (err: any) {
-      setError(
-        err.response?.data?.error || 'Credenciales inválidas. Inténtalo de nuevo.'
-      );
+      const errorMessage = err.response?.data?.error || 'Credenciales inválidas. Inténtalo de nuevo.';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -64,7 +66,7 @@ const Login = () => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
           
-          {/* Email Field */}
+          {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
               Correo Electrónico
@@ -91,7 +93,7 @@ const Login = () => {
                 type="button"
                 tabIndex={-1}
                 className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-                onClick={() => alert("Funcionalidad de recuperación en desarrollo.")}
+                onClick={() => toast.error('Funcionalidad en desarrollo')}
               >
                 ¿Olvidaste tu contraseña?
               </button>
