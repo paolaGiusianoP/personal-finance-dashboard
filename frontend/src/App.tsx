@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import Categories from './pages/Categories';
 import Profile from './pages/Profile';
+import Budgets from './pages/Budgets';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
@@ -44,10 +45,15 @@ function AppRoutes() {
         </PrivateRoute>
       } />
       <Route path="/profile" element={
-      <PrivateRoute>
-        <Profile />
-      </PrivateRoute>
-} />
+        <PrivateRoute>
+          <Profile />
+        </PrivateRoute>
+      } />
+      <Route path="/budgets" element={
+        <PrivateRoute>
+          <Budgets />
+        </PrivateRoute>
+      } />
       <Route path="/" element={<Navigate to="/dashboard" />} />
     </Routes>
   );

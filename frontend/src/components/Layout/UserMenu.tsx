@@ -51,15 +51,46 @@ const UserMenu = () => {
           {/* Opciones del menú */}
           <div className="p-2">
             <Link
+              to="/dashboard"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 w-full px-3 py-2 text-sm text-slate-300 rounded-xl hover:bg-slate-800 transition"
+            >
+              <span className="text-lg">📊</span>
+              Dashboard
+            </Link>
+            <Link
+              to="/transactions"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 w-full px-3 py-2 text-sm text-slate-300 rounded-xl hover:bg-slate-800 transition"
+            >
+              <span className="text-lg">💰</span>
+              Transacciones
+            </Link>
+            <Link
+              to="/categories"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 w-full px-3 py-2 text-sm text-slate-300 rounded-xl hover:bg-slate-800 transition"
+            >
+              <span className="text-lg">🏷️</span>
+              Categorías
+            </Link>
+            <Link
+              to="/budgets"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 w-full px-3 py-2 text-sm text-slate-300 rounded-xl hover:bg-slate-800 transition"
+            >
+              <span className="text-lg">📋</span>
+              Presupuestos
+            </Link>
+            <Link
               to="/profile"
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-3 w-full px-3 py-2 text-sm text-slate-300 rounded-xl hover:bg-slate-800 transition"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
+              <span className="text-lg">👤</span>
               Mi Perfil
             </Link>
+            <div className="border-t border-slate-800 my-2" />
             <button
               onClick={() => {
                 setIsOpen(false);
@@ -67,9 +98,7 @@ const UserMenu = () => {
               }}
               className="flex items-center gap-3 w-full px-3 py-2 text-sm text-red-400 rounded-xl hover:bg-red-500/10 transition"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
+              <span className="text-lg">🚪</span>
               Cerrar Sesión
             </button>
           </div>
