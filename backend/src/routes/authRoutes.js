@@ -9,5 +9,6 @@ router.post('/login', authController.login)
 router.post('/logout', authMiddleware, authController.logout)
 router.get('/me', authMiddleware, authController.getMe)
 router.put('/change-password', authMiddleware, authController.changePassword)
+router.put('/profile', authMiddleware, authController.updateProfile)
 
 module.exports = router

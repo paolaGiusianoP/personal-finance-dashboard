@@ -1,4 +1,7 @@
 const authService = require('../services/authService')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const prisma = require('../utils/prisma')  
 
 const register = async (req, res) => {
   try {
@@ -59,10 +62,50 @@ const changePassword = async (req, res) => {
   }
 }
 
+// Actualizar perfil
+const updateProfile = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    const userId = req.user.id;
+
+    if (email && email !== req.user.email) {
+      const existingUser = await prisma.user.findUnique({
+        where: { email }
+      });
+      if (existingUser) {
+        return res.status(400).json({ error: 'El email ya está en uso' });
+      }
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { 
+        name: name || req.user.name,
+        email: email || req.user.email
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        createdAt: true
+      }
+    });
+
+    res.json({ 
+      message: 'Perfil actualizado correctamente',
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar perfil' });
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
   getMe,
-  changePassword
+  changePassword,
+  updateProfile
 }

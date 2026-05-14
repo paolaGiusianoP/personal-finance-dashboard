@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import { TransactionList } from '../components/Transactions';
+import UserMenu from '../components/Layout/UserMenu';
 
 interface Summary {
   income: number;
@@ -17,7 +18,7 @@ interface CategoryStat {
 }
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   const [summary, setSummary] = useState<Summary>({
     income: 0,
@@ -62,6 +63,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white">
+      {/* Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
@@ -69,28 +71,28 @@ const Dashboard = () => {
 
       {/* Navbar */}
       <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/70 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link to="/dashboard" className="w-12 h-12 rounded-2xl bg-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
-              <span className="text-xl font-bold">$</span>
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link to="/dashboard" className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <span className="text-lg font-bold">$</span>
             </Link>
-            <div>
-              <h1 className="text-xl font-bold text-white">Finance Dashboard</h1>
-              <p className="text-sm text-slate-400">Personal Finance Analytics</p>
+            <div className="hidden sm:block">
+              <h1 className="text-lg font-bold text-white">Finance Dashboard</h1>
+              <p className="text-xs text-slate-400">Personal Finance</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:block text-right">
-              <p className="text-sm text-slate-400">Bienvenido</p>
-              <p className="font-semibold text-white">{user?.name}</p>
-            </div>
-            <button
-              onClick={logout}
-              className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition hover:bg-red-500/20"
-            >
-              Cerrar sesión
-            </button>
+          <div className="flex items-center gap-2">
+            <Link to="/dashboard" className="hidden md:block text-sm text-slate-400 hover:text-white px-3 py-1.5 rounded-xl transition">
+              Dashboard
+            </Link>
+            <Link to="/transactions" className="hidden md:block text-sm text-slate-400 hover:text-white px-3 py-1.5 rounded-xl transition">
+              Transacciones
+            </Link>
+            <Link to="/categories" className="hidden md:block text-sm text-slate-400 hover:text-white px-3 py-1.5 rounded-xl transition">
+              Categorías
+            </Link>
+            <UserMenu />
           </div>
         </div>
       </header>
@@ -109,12 +111,11 @@ const Dashboard = () => {
               <button
                 key={p}
                 onClick={() => setPeriod(p)}
-                className={`
-                  px-4 py-2 rounded-xl text-sm font-medium transition
-                  ${period === p
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                  period === p
                     ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
-                    : 'text-slate-400 hover:bg-slate-800'}
-                `}
+                    : 'text-slate-400 hover:bg-slate-800'
+                }`}
               >
                 {p === 'week' ? 'Semana' : p === 'month' ? 'Mes' : 'Año'}
               </button>
@@ -198,10 +199,7 @@ const Dashboard = () => {
 
               {/* Transactions Section */}
               <div className="xl:col-span-2">
-                <TransactionList 
-                  onTransactionChange={handleTransactionChange}
-                  limit={5}
-                />
+                <TransactionList onTransactionChange={handleTransactionChange} limit={5} />
               </div>
             </div>
           </>
