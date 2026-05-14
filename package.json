@@ -1,9 +1,12 @@
 {
   "dependencies": {
     "dotenv": "^17.4.2",
+    "file-saver": "^2.0.5",
+    "papaparse": "^5.5.3",
     "prisma": "^7.8.0"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^25.7.0",
     "typescript": "^6.0.3"
   }

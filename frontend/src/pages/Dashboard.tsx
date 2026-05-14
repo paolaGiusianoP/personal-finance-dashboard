@@ -5,6 +5,7 @@ import api from '../services/api';
 import { TransactionList } from '../components/Transactions';
 import UserMenu from '../components/Layout/UserMenu';
 import DashboardCharts from '../components/Dashboard/DashboardCharts';
+import { exportSummaryToCSV } from '../utils/exportToCSV';
 
 interface Summary {
   income: number;
@@ -55,7 +56,6 @@ const Dashboard = () => {
       setSummary(summaryRes.data.data);
       setCategoryStats(statsRes.data.data.data);
       
-      // Calcular evolución mensual desde las transacciones
       const transactions = transactionsRes.data.data;
       const monthlyMap = new Map<string, { month: string; ingresos: number; gastos: number; order: number }>();
       
@@ -100,6 +100,10 @@ const Dashboard = () => {
     fetchData();
   };
 
+  const handleExportSummary = () => {
+    exportSummaryToCSV(summary);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white">
       {/* Background */}
@@ -122,7 +126,7 @@ const Dashboard = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Link to="/dashboard" className="hidden md:block text-sm text-slate-400 hover:text-white px-3 py-1.5 rounded-xl transition">
+            <Link to="/dashboard" className="hidden md:block text-sm text-blue-400 font-medium px-3 py-1.5 rounded-xl transition">
               Dashboard
             </Link>
             <Link to="/transactions" className="hidden md:block text-sm text-slate-400 hover:text-white px-3 py-1.5 rounded-xl transition">
@@ -144,21 +148,31 @@ const Dashboard = () => {
             <p className="text-slate-400 mt-1">Resumen financiero y actividad reciente</p>
           </div>
 
-          {/* Period Selector */}
-          <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-2xl p-1">
-            {['week', 'month', 'year'].map((p) => (
-              <button
-                key={p}
-                onClick={() => setPeriod(p)}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
-                  period === p
-                    ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
-                    : 'text-slate-400 hover:bg-slate-800'
-                }`}
-              >
-                {p === 'week' ? 'Semana' : p === 'month' ? 'Mes' : 'Año'}
-              </button>
-            ))}
+          <div className="flex items-center gap-3">
+            {/* Botón Exportar resumen */}
+            <button
+              onClick={handleExportSummary}
+              className="rounded-2xl border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-slate-700 flex items-center gap-2"
+            >
+              📥 Exportar resumen
+            </button>
+
+            {/* Period Selector */}
+            <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-2xl p-1">
+              {['week', 'month', 'year'].map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPeriod(p)}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                    period === p
+                      ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
+                      : 'text-slate-400 hover:bg-slate-800'
+                  }`}
+                >
+                  {p === 'week' ? 'Semana' : p === 'month' ? 'Mes' : 'Año'}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -206,6 +220,7 @@ const Dashboard = () => {
               </div>
             </div>
 
+            {/* Charts Section */}
             <div className="mb-8">
               <DashboardCharts
                 categoryStats={categoryStats}
