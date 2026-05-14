@@ -161,6 +161,11 @@ backend/build/
 backend/uploads/
 backend/temp/
 backend/coverage/
+backend/logs/                    # ← Agrega esta línea
+
+# Frontend específico
+frontend/dist/
+frontend/build/
 
 # IDE y editor
 .vscode/
@@ -191,3 +196,7 @@ tmp/
 *.pem
 *.crt
 *.key
+
+# Package lock files (optional)
+package-lock.json
+yarn.lock

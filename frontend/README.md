@@ -14,6 +14,7 @@ Built with React, TypeScript, Tailwind CSS, and Vite to provide a modern, respon
 - Protected routes
 - Authentication context
 - Form validation
+- Profile management
 
 ## 📊 Dashboard
 - Financial summary cards
@@ -21,6 +22,7 @@ Built with React, TypeScript, Tailwind CSS, and Vite to provide a modern, respon
 - Monthly trends visualization
 - Expense analytics
 - Dynamic period filters
+- Financial KPIs
 
 ## 💳 Transactions
 - Create transactions
@@ -29,6 +31,7 @@ Built with React, TypeScript, Tailwind CSS, and Vite to provide a modern, respon
 - Advanced filters
 - Real-time updates
 - Responsive transaction table
+- CSV export support
 
 ## 🗂️ Categories
 - Custom category management
@@ -36,14 +39,49 @@ Built with React, TypeScript, Tailwind CSS, and Vite to provide a modern, respon
 - Income and expense categories
 - Dynamic category filtering
 
+## 💰 Budgets
+- Monthly budget limits
+- Budget progress bars with color alerts
+- Visual warnings when approaching limits
+- Month/year selector
+- Real-time budget vs actual spending
+- Budget alerts
+
+## 📥 Export
+- Export all transactions to CSV
+- Export financial summary to CSV
+- Automatic filename with date
+- UTF-8 encoding for special characters
+
+## 🔔 User Experience
+- Toast notifications for all CRUD actions
+- Success and error feedback
+- Loading states
+- Confirmation dialogs
+
 ## 🎨 UI/UX
-- Modern dark mode design
+- Modern responsive design
 - Glassmorphism effects
-- Responsive layout
 - Mobile navigation
 - Smooth transitions
-- Loading states
 - Reusable UI components
+- Responsive layout for desktop/tablet/mobile
+
+---
+
+# ✅ Implemented Features
+
+- ✅ Authentication (login/register/profile)
+- ✅ Transaction CRUD with filters
+- ✅ Category management with icons
+- ✅ Budget tracking with progress bars
+- ✅ Dashboard with interactive charts
+- ✅ CSV export for transactions and summary
+- ✅ Toast notifications
+- ✅ Responsive design (mobile/desktop)
+- ✅ Protected routes
+- ✅ TypeScript
+- ✅ Tailwind CSS
 
 ---
 
@@ -59,6 +97,9 @@ Built with React, TypeScript, Tailwind CSS, and Vite to provide a modern, respon
 | Axios | API requests |
 | Recharts | Data visualization |
 | Context API | State management |
+| React Hot Toast | Notifications |
+| PapaParse | CSV export |
+| FileSaver | File download |
 
 ---
 
@@ -89,25 +130,23 @@ frontend/
 │   ├── assets/
 │   │
 │   ├── components/
-│   │   ├── Auth/
-│   │   ├── Categories/
-│   │   ├── Dashboard/
 │   │   ├── Layout/
-|   |   └── Transactions/
+│   │   ├── Dashboard/
+│   │   ├── Transactions/
+│   │   ├── Categories/
+│   │   └── Budgets/
 │   │
 │   ├── contexts/
 │   │   └── AuthContext.tsx
 │   │
-│   │
-│   ├── layouts/
-│   │
 │   ├── pages/
 │   │   ├── Login.tsx
 │   │   ├── Register.tsx
-|   |   ├── Profile.tsx
+│   │   ├── Profile.tsx
 │   │   ├── Dashboard.tsx
 │   │   ├── Transactions.tsx
-│   │   └── Categories.tsx
+│   │   ├── Categories.tsx
+│   │   └── Budgets.tsx
 │   │
 │   ├── routes/
 │   │
@@ -119,6 +158,8 @@ frontend/
 │   ├── types/
 │   │
 │   ├── utils/
+│   │   ├── exportToCSV.ts
+│   │   └── formatters.ts
 │   │
 │   ├── App.tsx
 │   └── main.tsx
@@ -126,7 +167,8 @@ frontend/
 ├── package.json
 ├── vite.config.ts
 ├── tailwind.config.js
-└── tsconfig.json
+├── tsconfig.json
+└── README.md
 ```
 
 ---
@@ -202,6 +244,8 @@ The dashboard includes interactive charts built with Recharts:
 - Line charts
 - Financial summaries
 - Monthly trends
+- Expense analytics
+- Budget comparisons
 
 ---
 
@@ -209,10 +253,10 @@ The dashboard includes interactive charts built with Recharts:
 
 ## UI Principles
 - Minimalistic interface
-- High contrast dark mode
 - Consistent spacing
-- Responsive design
+- Responsive layouts
 - Reusable components
+- Clear visual hierarchy
 
 ## Tailwind Usage
 - Utility-first styling
@@ -236,6 +280,32 @@ Responsive features include:
 - Flexible grids
 - Adaptive tables
 - Collapsible layouts
+- Responsive charts
+
+---
+
+# 🔔 Toast Notifications
+
+The application includes real-time notifications for:
+- Successful actions
+- Error handling
+- CRUD operations
+- Authentication feedback
+- Export actions
+
+---
+
+# 📥 CSV Export
+
+Users can export:
+- Transactions
+- Financial summaries
+- Reports with automatic filenames
+
+Export features include:
+- UTF-8 support
+- Special character compatibility
+- Downloadable CSV files
 
 ---
 
@@ -252,22 +322,26 @@ Responsive features include:
 - Dynamic rendering
 - Form handling
 - Data visualization
+- Budget tracking and alerts
+- Export capabilities (CSV)
+- Toast notifications
 - Clean UI design
 
 ---
 
 # 🚧 Future Improvements
 
-- Global state with Zustand
-- Theme customization
-- Advanced animations
-- Skeleton loaders
+- ~~Toast notifications~~ ✅
+- ~~CSV export~~ ✅
+- ~~Budget tracking~~ ✅
+- Dark/light theme toggle
+- Global state with Zustand/Redux
 - PWA support
 - Offline mode
+- Advanced animations
 - Internationalization (i18n)
 - Accessibility improvements
-- Component testing
-- Dark/light theme toggle
+- Component testing with Vitest
 
 ---
 
@@ -285,6 +359,3 @@ npm run build
 
 ---
 
-# 👩‍💻 Author
-
-Frontend developed as part of a professional fullstack portfolio project focused on modern UI development, data visualization, and scalable frontend architecture.

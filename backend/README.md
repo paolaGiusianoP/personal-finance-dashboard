@@ -2,7 +2,7 @@
 
 REST API for the Personal Finance Dashboard application.
 
-Built with Node.js, Express, Prisma ORM, and PostgreSQL following a layered architecture focused on scalability, maintainability, and clean code practices.
+Built with Node.js, Express, Prisma ORM, and PostgreSQL following a scalable layered architecture focused on clean code, maintainability, security, and professional backend practices.
 
 ---
 
@@ -14,13 +14,17 @@ Built with Node.js, Express, Prisma ORM, and PostgreSQL following a layered arch
 - Password hashing with bcrypt
 - Protected routes
 - Persistent sessions
+- Profile management
 
 ## 💳 Transactions
 - Create transactions
 - Update transactions
 - Delete transactions
 - Financial summaries
-- Filters by category, date, and type
+- Date filtering
+- Category filtering
+- Income and expense tracking
+- CSV export support
 
 ## 🗂️ Categories
 - Default categories for new users
@@ -31,8 +35,33 @@ Built with Node.js, Express, Prisma ORM, and PostgreSQL following a layered arch
 ## 📊 Analytics
 - Monthly summaries
 - Expense statistics
-- Category aggregations
 - Financial KPIs
+- Category aggregations
+- Dashboard analytics
+
+## 💰 Budgets
+- Monthly budgets
+- Budget alerts
+- Budget tracking by category
+- Expense monitoring
+
+---
+
+# ✅ Implemented Features
+
+- ✅ Swagger/OpenAPI documentation
+- ✅ Rate limiting
+- ✅ Helmet security headers
+- ✅ Compression (Gzip)
+- ✅ Winston logging
+- ✅ Global error handler
+- ✅ Zod validation
+- ✅ Health check endpoint
+- ✅ JWT authentication
+- ✅ Docker support
+- ✅ Environment configuration
+- ✅ Budget management
+- ✅ CSV export support
 
 ---
 
@@ -46,13 +75,19 @@ Built with Node.js, Express, Prisma ORM, and PostgreSQL following a layered arch
 | PostgreSQL | Database |
 | JWT | Authentication |
 | Bcrypt | Password hashing |
+| Zod | Validation |
+| Swagger/OpenAPI | API documentation |
+| Winston | Logging |
+| Helmet | Security |
+| Express Rate Limit | API protection |
+| Compression | Response optimization |
 | Docker | Containerization |
 
 ---
 
 # 🏗️ Architecture
 
-The backend uses a layered architecture:
+The backend follows a layered architecture:
 
 ```txt
 Controller
@@ -64,33 +99,38 @@ Repository
 Database
 ```
 
-## Layer Responsibilities
+---
 
-### Controllers
-Handle:
-- HTTP requests
-- Request validation
+# 📚 Layer Responsibilities
+
+## Controllers
+Responsible for:
+- HTTP request handling
 - Response formatting
 - Status codes
+- Request parsing
 
-### Services
-Handle:
+## Services
+Responsible for:
 - Business logic
 - Financial calculations
 - Validation rules
 - Application workflows
 
-### Repositories
-Handle:
-- Database queries
-- Prisma operations
+## Repositories
+Responsible for:
+- Database access
+- Prisma queries
 - Data persistence
+- Database abstraction
 
-### Middleware
-Handle:
+## Middlewares
+Responsible for:
 - Authentication
 - Error handling
-- Route protection
+- Validation
+- Security
+- Logging
 
 ---
 
@@ -108,36 +148,47 @@ backend/
 │   ├── controllers/
 │   │   ├── authController.js
 │   │   ├── transactionController.js
-│   │   └── categoryController.js
+│   │   ├── categoryController.js
+│   │   └── budgetController.js
 │   │
 │   ├── services/
 │   │   ├── authService.js
 │   │   ├── transactionService.js
-│   │   └── categoryService.js
+│   │   ├── categoryService.js
+│   │   └── budgetService.js
 │   │
 │   ├── repositories/
 │   │   ├── userRepository.js
 │   │   ├── transactionRepository.js
-│   │   └── categoryRepository.js
+│   │   ├── categoryRepository.js
+│   │   └── budgetRepository.js
 │   │
-│   ├── middleware/
+│   ├── middlewares/
 │   │   ├── authMiddleware.js
-│   │   └── errorMiddleware.js
+│   │   ├── errorMiddleware.js
+│   │   ├── validateMiddleware.js
+│   │   └── rateLimiter.js
 │   │
 │   ├── routes/
 │   │   ├── authRoutes.js
 │   │   ├── transactionRoutes.js
-│   │   └── categoryRoutes.js
+│   │   ├── categoryRoutes.js
+│   │   └── budgetRoutes.js
+│   │
+│   ├── validations/
+│   │
+│   ├── docs/
 │   │
 │   ├── utils/
-│   │   └── prisma.js
+│   │   ├── prisma.js
+│   │   └── logger.js
 │   │
-│   ├── app.js
-│   └── server.js
+│   └── index.js
 │
 ├── package.json
 ├── .env
-└── docker-compose.yml
+├── docker-compose.yml
+└── README.md
 ```
 
 ---
@@ -174,7 +225,7 @@ npx prisma generate
 
 ---
 
-## 4. Run database migrations
+## 4. Push database schema
 
 ```bash
 npx prisma db push
@@ -226,6 +277,25 @@ volumes:
 
 ---
 
+# 📚 API Documentation
+
+Once the server is running, access the interactive API documentation at:
+
+```txt
+http://localhost:5000/api-docs
+```
+
+---
+
+# 🧪 API Testing
+
+You can test all endpoints using:
+- Swagger UI
+- Postman
+- Insomnia
+
+---
+
 # 🔐 Authentication Flow
 
 ```txt
@@ -239,6 +309,18 @@ Protected Requests
      ↓
 Auth Middleware Verification
 ```
+
+---
+
+# 🔒 Security Features
+
+- Helmet security headers
+- Rate limiting
+- Password hashing with bcrypt
+- JWT authentication
+- Zod request validation
+- Protected routes
+- Global error handling
 
 ---
 
@@ -280,20 +362,22 @@ Auth Middleware Verification
 
 ---
 
-# 🧠 Backend Concepts Demonstrated
+## Budgets
 
-- REST API architecture
-- JWT authentication
-- Layered architecture
-- Repository pattern
-- Database modeling
-- Prisma ORM
-- Clean code practices
-- Middleware architecture
-- Protected routes
-- Error handling
-- Financial calculations
-- API filtering
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/budgets` | Get budgets by month/year |
+| POST | `/api/budgets` | Create/update budget |
+| DELETE | `/api/budgets/:id` | Delete budget |
+| GET | `/api/budgets/alerts` | Get budget alerts |
+
+---
+
+## Health Check
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/health` | API health status |
 
 ---
 
@@ -304,33 +388,64 @@ Main entities:
 - Users
 - Transactions
 - Categories
+- Budgets
+- Sessions
 
 Relationships:
 
 ```txt
 User
  ├── Transactions
- └── Categories
+ ├── Categories
+ ├── Budgets
+ └── Sessions
 
 Category
- └── Transactions
+ ├── Transactions
+ └── Budgets
 ```
+
+---
+
+# 🧠 Backend Concepts Demonstrated
+
+- REST API architecture
+- JWT authentication
+- Layered architecture
+- Repository pattern
+- Database modeling
+- Prisma ORM
+- Clean code practices
+- Middleware architecture
+- API documentation
+- Security best practices
+- Logging system
+- Validation with Zod
+- Financial calculations
+- Filtering and analytics
+- Dockerized development
+- Budget tracking and alerts
+- Export capabilities (CSV)
 
 ---
 
 # 🚧 Future Improvements
 
+- ~~API documentation with Swagger~~ ✅
+- ~~Rate limiting~~ ✅
+- ~~Logging system~~ ✅
+- ~~Validation with Zod~~ ✅
 - Unit testing
 - Integration testing
-- API documentation with Swagger
-- Rate limiting
 - Refresh tokens
 - Email verification
 - Password recovery
 - Pagination
 - Redis caching
-- Logging system
 - CI/CD pipeline
+- Background jobs
+- Webhooks
+- Notifications
 
 ---
 
@@ -346,7 +461,3 @@ Category
 - Railway PostgreSQL
 
 ---
-
-# 👩‍💻 Author
-
-Backend developed as part of a professional fullstack portfolio project focused on clean architecture, scalability, and modern API development.
