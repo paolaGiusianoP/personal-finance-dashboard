@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import { TransactionList } from '../components/Transactions';
 import UserMenu from '../components/Layout/UserMenu';
+import DashboardCharts from '../components/Dashboard/DashboardCharts';
 
 interface Summary {
   income: number;
@@ -17,6 +18,12 @@ interface CategoryStat {
   total: number;
 }
 
+interface MonthlyDataPoint {
+  month: string;
+  ingresos: number;
+  gastos: number;
+}
+
 const Dashboard = () => {
   const { user } = useAuth();
 
@@ -27,6 +34,7 @@ const Dashboard = () => {
   });
 
   const [categoryStats, setCategoryStats] = useState<CategoryStat[]>([]);
+  const [monthlyData, setMonthlyData] = useState<MonthlyDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState('month');
 
@@ -38,11 +46,42 @@ const Dashboard = () => {
     try {
       setLoading(true);
 
-      const summaryRes = await api.get(`/transactions/summary?period=${period}`);
-      const statsRes = await api.get(`/transactions/stats/categories?period=${period}`);
+      const [summaryRes, statsRes, transactionsRes] = await Promise.all([
+        api.get(`/transactions/summary?period=${period}`),
+        api.get(`/transactions/stats/categories?period=${period}`),
+        api.get('/transactions'),
+      ]);
 
       setSummary(summaryRes.data.data);
       setCategoryStats(statsRes.data.data.data);
+      
+      // Calcular evolución mensual desde las transacciones
+      const transactions = transactionsRes.data.data;
+      const monthlyMap = new Map<string, { month: string; ingresos: number; gastos: number; order: number }>();
+      
+      transactions.forEach((t: any) => {
+        const date = new Date(t.date);
+        const monthName = date.toLocaleDateString('es-ES', { month: 'short' });
+        const key = `${date.getFullYear()}-${date.getMonth()}`;
+        const order = date.getTime();
+        
+        if (!monthlyMap.has(key)) {
+          monthlyMap.set(key, { month: monthName, ingresos: 0, gastos: 0, order });
+        }
+        
+        const current = monthlyMap.get(key)!;
+        if (t.type === 'income') {
+          current.ingresos += t.amount;
+        } else {
+          current.gastos += t.amount;
+        }
+      });
+      
+      const monthlyDataArray = Array.from(monthlyMap.values())
+        .sort((a, b) => a.order - b.order)
+        .slice(-6);
+      
+      setMonthlyData(monthlyDataArray);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     } finally {
@@ -124,7 +163,7 @@ const Dashboard = () => {
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center h-[400px]">
+          <div className="flex items-center justify-center h-[600px]">
             <div className="flex items-center gap-3 text-slate-400">
               <div className="h-6 w-6 border-2 border-slate-600 border-t-blue-500 rounded-full animate-spin" />
               Cargando dashboard...
@@ -167,6 +206,16 @@ const Dashboard = () => {
               </div>
             </div>
 
+            <div className="mb-8">
+              <DashboardCharts
+                categoryStats={categoryStats}
+                income={summary.income}
+                expense={summary.expense}
+                period={period}
+                monthlyData={monthlyData}
+              />
+            </div>
+
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
               {/* Categories Section */}
               <div className="xl:col-span-1 bg-slate-900/80 border border-slate-800 rounded-3xl p-6 backdrop-blur-xl">
@@ -177,18 +226,17 @@ const Dashboard = () => {
 
                 {categoryStats.length > 0 ? (
                   <div className="space-y-4">
-                    {categoryStats.map((stat, index) => (
+                    {categoryStats.slice(0, 5).map((stat, index) => (
                       <div key={index} className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-950/50 p-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-xl">
+                          <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-lg">
                             {stat.icon || '📦'}
                           </div>
                           <div>
-                            <p className="font-medium text-white">{stat.category}</p>
-                            <p className="text-sm text-slate-500">Categoría</p>
+                            <p className="font-medium text-white text-sm">{stat.category}</p>
                           </div>
                         </div>
-                        <p className="font-semibold text-red-400">{formatCurrency(stat.total)}</p>
+                        <p className="font-semibold text-red-400 text-sm">{formatCurrency(stat.total)}</p>
                       </div>
                     ))}
                   </div>

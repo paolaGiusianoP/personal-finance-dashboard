@@ -1,4 +1,5 @@
 const transactionService = require('../services/transactionService')
+const prisma = require('../utils/prisma') 
 
 // Obtener todas las transacciones del usuario
 const getTransactions = async (req, res) => {
@@ -126,11 +127,39 @@ const getCategoryStats = async (req, res) => {
   }
 }
 
+// Obtener evolución mensual
+const getMonthlyEvolution = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { months = 6 } = req.query; 
+
+    const result = await prisma.$queryRaw`
+      SELECT 
+        TO_CHAR(DATE_TRUNC('month', date), 'Mon') as month,
+        EXTRACT(MONTH FROM date) as month_num,
+        EXTRACT(YEAR FROM date) as year,
+        SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
+        SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense
+      FROM "Transaction"
+      WHERE "userId" = ${userId}
+        AND date >= NOW() - INTERVAL '${months} months'
+      GROUP BY DATE_TRUNC('month', date), EXTRACT(MONTH FROM date), EXTRACT(YEAR FROM date)
+      ORDER BY year ASC, month_num ASC
+    `;
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener evolución mensual' });
+  }
+};
+
 module.exports = {
   getTransactions,
   createTransaction,
   updateTransaction,
   deleteTransaction,
   getSummary,
-  getCategoryStats
+  getCategoryStats,
+  getMonthlyEvolution 
 }

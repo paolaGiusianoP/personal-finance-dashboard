@@ -10,6 +10,7 @@ router.get('/', transactionController.getTransactions)
 router.post('/', transactionController.createTransaction)
 router.put('/:id', transactionController.updateTransaction)
 router.delete('/:id', transactionController.deleteTransaction)
+router.get('/evolution/monthly', authMiddleware, transactionController.getMonthlyEvolution);
 
 // Rutas de estadísticas
 router.get('/summary', transactionController.getSummary)
