@@ -18,26 +18,25 @@ const prisma = require('./utils/prisma');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Middlewares
 app.use(helmet());
-
 app.use(compression());
-
 app.use(cors());
-
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Rate limiting
 app.use('/api/', generalLimiter);
-
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
-
 app.use('/api/transactions', writeLimiter);
 app.use('/api/categories', writeLimiter);
 app.use('/api/budgets', writeLimiter);
 
+// Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
+// Health check
 app.get('/health', async (req, res) => {
   const healthcheck = {
     status: 'OK',
@@ -62,18 +61,22 @@ app.get('/health', async (req, res) => {
   }
 });
 
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/budgets', budgetRoutes);
 
+// Error handlers
 app.use(notFound);
-
 app.use(errorHandler);
 
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    logger.info(`Servidor corriendo en http://localhost:${PORT}`);
+    logger.info(`Documentación API: http://localhost:${PORT}/api-docs`);
+    logger.info(`Health check: http://localhost:${PORT}/health`);
+  });
+}
 
-app.listen(PORT, () => {
-  logger.info(`Servidor corriendo en http://localhost:${PORT}`);
-  logger.info(`Documentación API: http://localhost:${PORT}/api-docs`);
-  logger.info(`Health check: http://localhost:${PORT}/health`);
-});
+module.exports = app;
