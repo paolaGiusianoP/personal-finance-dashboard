@@ -6,6 +6,7 @@ import { TransactionList } from '../components/Transactions';
 import UserMenu from '../components/Layout/UserMenu';
 import DashboardCharts from '../components/Dashboard/DashboardCharts';
 import { exportSummaryToCSV } from '../utils/exportToCSV';
+import { exportSummaryToPDF } from '../utils/exportToPDF';
 import toast from 'react-hot-toast';
 
 interface Summary {
@@ -39,6 +40,7 @@ const Dashboard = () => {
   const [monthlyData, setMonthlyData] = useState<MonthlyDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState('month');
+  const [showExportMenu, setShowExportMenu] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -103,9 +105,16 @@ const Dashboard = () => {
     toast.success('Datos actualizados', { icon: '🔄' });
   };
 
-  const handleExportSummary = () => {
+  const handleExportCSV = () => {
     exportSummaryToCSV(summary);
-    toast.success('Resumen exportado correctamente', { icon: '📥' });
+    toast.success('Resumen exportado a CSV', { icon: '📊' });
+    setShowExportMenu(false);
+  };
+
+  const handleExportPDF = () => {
+    exportSummaryToPDF(summary, period === 'week' ? 'Semana' : period === 'month' ? 'Mes' : 'Año');
+    toast.success('Resumen exportado a PDF', { icon: '📑' });
+    setShowExportMenu(false);
   };
 
   return (
@@ -153,20 +162,45 @@ const Dashboard = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Botón Exportar resumen */}
-            <button
-              onClick={handleExportSummary}
-              className="rounded-2xl border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-slate-700 flex items-center gap-2"
-            >
-              📥 Exportar resumen
-            </button>
+            {/* Botón Exportar con menú desplegable */}
+            <div className="relative">
+              <button
+                onClick={() => setShowExportMenu(!showExportMenu)}
+                className="rounded-2xl border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-slate-700 flex items-center gap-2"
+              >
+                📥 Exportar
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {showExportMenu && (
+                <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-slate-700 bg-slate-800 shadow-xl z-50 overflow-hidden">
+                  <button
+                    onClick={handleExportCSV}
+                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-white hover:bg-slate-700 transition"
+                  >
+                    📊 Exportar a CSV
+                  </button>
+                  <button
+                    onClick={handleExportPDF}
+                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-white hover:bg-slate-700 transition border-t border-slate-700"
+                  >
+                    📑 Exportar a PDF
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* Period Selector */}
             <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-2xl p-1">
               {['week', 'month', 'year'].map((p) => (
                 <button
                   key={p}
-                  onClick={() => setPeriod(p)}
+                  onClick={() => {
+                    setPeriod(p);
+                    setShowExportMenu(false);
+                  }}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
                     period === p
                       ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
@@ -179,6 +213,14 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Cerrar menú al hacer clic fuera */}
+        {showExportMenu && (
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setShowExportMenu(false)}
+          />
+        )}
 
         {loading ? (
           <div className="flex items-center justify-center h-[600px]">

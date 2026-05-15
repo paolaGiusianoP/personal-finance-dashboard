@@ -5,6 +5,7 @@ import api from '../services/api';
 import { TransactionList } from '../components/Transactions';
 import UserMenu from '../components/Layout/UserMenu';
 import { exportTransactionsToCSV, exportSummaryToCSV } from '../utils/exportToCSV';
+import { exportTransactionsToPDF, exportSummaryToPDF } from '../utils/exportToPDF';
 import toast from 'react-hot-toast';
 
 interface Transaction {
@@ -30,7 +31,8 @@ const Transactions = () => {
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
   const [summary, setSummary] = useState<Summary>({ income: 0, expense: 0, balance: 0 });
   const [loading, setLoading] = useState(true);
-  const [showExportMenu, setShowExportMenu] = useState(false);
+  const [showTransactionsMenu, setShowTransactionsMenu] = useState(false);
+  const [showSummaryMenu, setShowSummaryMenu] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -53,18 +55,36 @@ const Transactions = () => {
     }
   };
 
-  const handleExportTransactions = () => {
+  const handleExportTransactionsCSV = () => {
     if (allTransactions.length === 0) {
       toast.error('No hay transacciones para exportar');
       return;
     }
     exportTransactionsToCSV(allTransactions, 'mis_transacciones');
-    toast.success(`${allTransactions.length} transacciones exportadas`, { icon: '📄' });
+    toast.success(`${allTransactions.length} transacciones exportadas a CSV`, { icon: '📄' });
+    setShowTransactionsMenu(false);
   };
 
-  const handleExportSummary = () => {
+  const handleExportTransactionsPDF = () => {
+    if (allTransactions.length === 0) {
+      toast.error('No hay transacciones para exportar');
+      return;
+    }
+    exportTransactionsToPDF(allTransactions, 'Todas');
+    toast.success(`${allTransactions.length} transacciones exportadas a PDF`, { icon: '📑' });
+    setShowTransactionsMenu(false);
+  };
+
+  const handleExportSummaryCSV = () => {
     exportSummaryToCSV(summary);
-    toast.success('Resumen exportado correctamente', { icon: '📊' });
+    toast.success('Resumen exportado a CSV', { icon: '📊' });
+    setShowSummaryMenu(false);
+  };
+
+  const handleExportSummaryPDF = () => {
+    exportSummaryToPDF(summary, 'Mes actual');
+    toast.success('Resumen exportado a PDF', { icon: '📑' });
+    setShowSummaryMenu(false);
   };
 
   return (
@@ -111,37 +131,67 @@ const Transactions = () => {
           </div>
 
           <div className="flex gap-3">
-            {/* Botón Exportar con menú */}
+            {/* Botón Exportar Transacciones */}
             <div className="relative">
               <button
-                onClick={() => setShowExportMenu(!showExportMenu)}
+                onClick={() => {
+                  setShowTransactionsMenu(!showTransactionsMenu);
+                  setShowSummaryMenu(false);
+                }}
                 className="rounded-2xl border border-slate-700 bg-slate-800 px-5 py-3 font-semibold text-white transition-all hover:bg-slate-700 flex items-center gap-2"
               >
-                📥 Exportar
+                📋 Transacciones
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
 
-              {showExportMenu && (
-                <div className="absolute right-0 mt-2 w-64 rounded-2xl border border-slate-700 bg-slate-800 shadow-xl z-50 overflow-hidden">
+              {showTransactionsMenu && (
+                <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-slate-700 bg-slate-800 shadow-xl z-50 overflow-hidden">
                   <button
-                    onClick={() => {
-                      handleExportTransactions();
-                      setShowExportMenu(false);
-                    }}
+                    onClick={handleExportTransactionsCSV}
                     className="flex items-center gap-3 w-full px-4 py-3 text-sm text-white hover:bg-slate-700 transition"
                   >
-                    📄 Exportar todas las transacciones
+                    📄 Exportar a CSV
                   </button>
                   <button
-                    onClick={() => {
-                      handleExportSummary();
-                      setShowExportMenu(false);
-                    }}
+                    onClick={handleExportTransactionsPDF}
                     className="flex items-center gap-3 w-full px-4 py-3 text-sm text-white hover:bg-slate-700 transition border-t border-slate-700"
                   >
-                    📊 Exportar resumen
+                    📑 Exportar a PDF
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Botón Exportar Resumen */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setShowSummaryMenu(!showSummaryMenu);
+                  setShowTransactionsMenu(false);
+                }}
+                className="rounded-2xl border border-slate-700 bg-slate-800 px-5 py-3 font-semibold text-white transition-all hover:bg-slate-700 flex items-center gap-2"
+              >
+                📊 Resumen
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {showSummaryMenu && (
+                <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-slate-700 bg-slate-800 shadow-xl z-50 overflow-hidden">
+                  <button
+                    onClick={handleExportSummaryCSV}
+                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-white hover:bg-slate-700 transition"
+                  >
+                    📊 Exportar a CSV
+                  </button>
+                  <button
+                    onClick={handleExportSummaryPDF}
+                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-white hover:bg-slate-700 transition border-t border-slate-700"
+                  >
+                    📑 Exportar a PDF
                   </button>
                 </div>
               )}
@@ -156,11 +206,14 @@ const Transactions = () => {
           </div>
         </div>
 
-        {/* Cerrar menú al hacer clic fuera */}
-        {showExportMenu && (
+        {/* Cerrar menús al hacer clic fuera */}
+        {(showTransactionsMenu || showSummaryMenu) && (
           <div
             className="fixed inset-0 z-40"
-            onClick={() => setShowExportMenu(false)}
+            onClick={() => {
+              setShowTransactionsMenu(false);
+              setShowSummaryMenu(false);
+            }}
           />
         )}
 
