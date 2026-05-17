@@ -34,6 +34,8 @@ const Transactions = () => {
   const [showTransactionsMenu, setShowTransactionsMenu] = useState(false);
   const [showSummaryMenu, setShowSummaryMenu] = useState(false);
 
+  const [refreshKey, setRefreshKey] = useState(0);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -85,6 +87,11 @@ const Transactions = () => {
     exportSummaryToPDF(summary, 'Mes actual');
     toast.success('Resumen exportado a PDF', { icon: '📑' });
     setShowSummaryMenu(false);
+  };
+
+  const handleTransactionChange = () => {
+    fetchData();
+    setRefreshKey(prev => prev + 1);
   };
 
   return (
@@ -196,7 +203,6 @@ const Transactions = () => {
                 </div>
               )}
             </div>
-
           </div>
         </div>
 
@@ -253,7 +259,20 @@ const Transactions = () => {
         )}
 
         {/* Lista de transacciones */}
-        <TransactionList onTransactionChange={fetchData} />
+        <TransactionList 
+          key={refreshKey}
+          onTransactionChange={handleTransactionChange}
+          actions={
+            <button
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('openNewTransactionModal'));
+              }}
+              className="rounded-2xl bg-blue-500 px-5 py-3 font-semibold text-white transition-all hover:bg-blue-600"
+            >
+              + Nueva Transacción
+            </button>
+          }
+        />
       </main>
     </div>
   );

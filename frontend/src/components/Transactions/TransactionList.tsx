@@ -8,11 +8,13 @@ import type { Category, Transaction, TransactionFormData, Filters } from '../../
 interface TransactionListProps {
   onTransactionChange?: () => void;
   limit?: number;
+  actions?: React.ReactNode; 
 }
 
 const TransactionList: React.FC<TransactionListProps> = ({ 
   onTransactionChange, 
-  limit 
+  limit,
+  actions
 }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -149,29 +151,24 @@ const TransactionList: React.FC<TransactionListProps> = ({
 
   return (
     <>
-      {/* Botón Nueva Transacción - Solo visible en página completa */}
-      {!limit && (
-        <div className="flex justify-end mb-4">
-          <button
-            onClick={handleNewTransaction}
-            className="rounded-2xl bg-blue-500 px-5 py-3 font-semibold text-white transition-all hover:bg-blue-600"
-          >
-            + Nueva Transacción
-          </button>
-        </div>
-      )}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        {!limit && (
+          <div className="flex-1">
+            <TransactionFilters
+              filters={filters}
+              categories={categories}
+              onFilterChange={setFilters}
+              onClearFilters={() =>
+                setFilters({ type: '', categoryId: '', startDate: '', endDate: '' })
+              }
+            />
+          </div>
+        )}
+        
+        {actions && <div>{actions}</div>}
+      </div>
 
-      {!limit && (
-        <TransactionFilters
-          filters={filters}
-          categories={categories}
-          onFilterChange={setFilters}
-          onClearFilters={() =>
-            setFilters({ type: '', categoryId: '', startDate: '', endDate: '' })
-          }
-        />
-      )}
-
+      {/* Tabla de transacciones */}
       <div className="bg-slate-900/80 border border-slate-800 rounded-3xl overflow-hidden backdrop-blur-xl">
         <TransactionTable
           transactions={displayTransactions} 
@@ -183,6 +180,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
         />
       </div>
 
+      {/* Modal para crear/editar transacción */}
       <TransactionModal
         isOpen={showModal}
         editingTransaction={!!editingTransaction}
