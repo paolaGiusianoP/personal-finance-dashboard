@@ -5,6 +5,7 @@ import api from '../services/api';
 import { TransactionList } from '../components/Transactions';
 import UserMenu from '../components/Layout/UserMenu';
 import DashboardCharts from '../components/Dashboard/DashboardCharts';
+import InsightsCard from '../components/Dashboard/InsightsCard';
 import { exportSummaryToCSV } from '../utils/exportToCSV';
 import { exportSummaryToPDF } from '../utils/exportToPDF';
 import toast from 'react-hot-toast';
@@ -264,6 +265,11 @@ const Dashboard = () => {
                   <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-2xl">⚖️</div>
                 </div>
               </div>
+            </div>
+
+            {/* Insights Section */}
+            <div className="mb-8">
+              <InsightsCard />
             </div>
 
             {/* Charts Section */}
