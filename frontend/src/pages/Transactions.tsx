@@ -197,12 +197,6 @@ const Transactions = () => {
               )}
             </div>
 
-            <Link
-              to="/transactions"
-              className="rounded-2xl bg-blue-500 px-5 py-3 font-semibold text-white transition-all hover:bg-blue-600"
-            >
-              + Nueva Transacción
-            </Link>
           </div>
         </div>
 

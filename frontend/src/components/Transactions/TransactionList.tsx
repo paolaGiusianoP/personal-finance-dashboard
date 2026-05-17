@@ -7,7 +7,7 @@ import type { Category, Transaction, TransactionFormData, Filters } from '../../
 
 interface TransactionListProps {
   onTransactionChange?: () => void;
-  limit?: number; 
+  limit?: number;
 }
 
 const TransactionList: React.FC<TransactionListProps> = ({ 
@@ -110,6 +110,18 @@ const TransactionList: React.FC<TransactionListProps> = ({
     setShowModal(true);
   };
 
+  const handleNewTransaction = () => {
+    setEditingTransaction(null);
+    setFormData({
+      amount: '',
+      type: 'expense',
+      description: '',
+      date: new Date().toISOString().split('T')[0],
+      categoryId: '',
+    });
+    setShowModal(true);
+  };
+
   const resetForm = () => {
     setEditingTransaction(null);
     setFormData({
@@ -137,6 +149,17 @@ const TransactionList: React.FC<TransactionListProps> = ({
 
   return (
     <>
+      {/* Botón Nueva Transacción - Solo visible en página completa */}
+      {!limit && (
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={handleNewTransaction}
+            className="rounded-2xl bg-blue-500 px-5 py-3 font-semibold text-white transition-all hover:bg-blue-600"
+          >
+            + Nueva Transacción
+          </button>
+        </div>
+      )}
 
       {!limit && (
         <TransactionFilters
