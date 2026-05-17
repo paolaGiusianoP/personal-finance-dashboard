@@ -8,13 +8,11 @@ import type { Category, Transaction, TransactionFormData, Filters } from '../../
 interface TransactionListProps {
   onTransactionChange?: () => void;
   limit?: number;
-  actions?: React.ReactNode; 
 }
 
 const TransactionList: React.FC<TransactionListProps> = ({ 
   onTransactionChange, 
-  limit,
-  actions
+  limit 
 }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -38,6 +36,14 @@ const TransactionList: React.FC<TransactionListProps> = ({
   useEffect(() => {
     fetchData();
   }, [filters]);
+
+  useEffect(() => {
+    const handleOpenModal = () => {
+      handleNewTransaction();
+    };
+    window.addEventListener('openNewTransactionModal', handleOpenModal);
+    return () => window.removeEventListener('openNewTransactionModal', handleOpenModal);
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -75,8 +81,10 @@ const TransactionList: React.FC<TransactionListProps> = ({
 
       if (editingTransaction) {
         await api.put(`/transactions/${editingTransaction.id}`, data);
+        window.dispatchEvent(new CustomEvent('transactionUpdated'));
       } else {
         await api.post('/transactions', data);
+        window.dispatchEvent(new CustomEvent('transactionCreated'));
       }
 
       resetForm();
@@ -92,6 +100,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
     if (!window.confirm('¿Eliminar esta transacción?')) return;
     try {
       await api.delete(`/transactions/${id}`);
+      window.dispatchEvent(new CustomEvent('transactionDeleted'));
       fetchData();
       onTransactionChange?.();
     } catch (error) {
@@ -151,22 +160,16 @@ const TransactionList: React.FC<TransactionListProps> = ({
 
   return (
     <>
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-        {!limit && (
-          <div className="flex-1">
-            <TransactionFilters
-              filters={filters}
-              categories={categories}
-              onFilterChange={setFilters}
-              onClearFilters={() =>
-                setFilters({ type: '', categoryId: '', startDate: '', endDate: '' })
-              }
-            />
-          </div>
-        )}
-        
-        {actions && <div>{actions}</div>}
-      </div>
+      {!limit && (
+        <TransactionFilters
+          filters={filters}
+          categories={categories}
+          onFilterChange={setFilters}
+          onClearFilters={() =>
+            setFilters({ type: '', categoryId: '', startDate: '', endDate: '' })
+          }
+        />
+      )}
 
       {/* Tabla de transacciones */}
       <div className="bg-slate-900/80 border border-slate-800 rounded-3xl overflow-hidden backdrop-blur-xl">

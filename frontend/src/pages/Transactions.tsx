@@ -34,8 +34,6 @@ const Transactions = () => {
   const [showTransactionsMenu, setShowTransactionsMenu] = useState(false);
   const [showSummaryMenu, setShowSummaryMenu] = useState(false);
 
-  const [refreshKey, setRefreshKey] = useState(0);
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -91,7 +89,10 @@ const Transactions = () => {
 
   const handleTransactionChange = () => {
     fetchData();
-    setRefreshKey(prev => prev + 1);
+  };
+
+  const openNewTransactionModal = () => {
+    window.dispatchEvent(new CustomEvent('openNewTransactionModal'));
   };
 
   return (
@@ -138,6 +139,14 @@ const Transactions = () => {
           </div>
 
           <div className="flex gap-3">
+            {/* Botón Nueva Transacción */}
+            <button
+              onClick={openNewTransactionModal}
+              className="rounded-2xl bg-blue-500 px-5 py-3 font-semibold text-white transition-all hover:bg-blue-600"
+            >
+              + Nueva Transacción
+            </button>
+
             {/* Botón Exportar Transacciones */}
             <div className="relative">
               <button
@@ -259,20 +268,7 @@ const Transactions = () => {
         )}
 
         {/* Lista de transacciones */}
-        <TransactionList 
-          key={refreshKey}
-          onTransactionChange={handleTransactionChange}
-          actions={
-            <button
-              onClick={() => {
-                window.dispatchEvent(new CustomEvent('openNewTransactionModal'));
-              }}
-              className="rounded-2xl bg-blue-500 px-5 py-3 font-semibold text-white transition-all hover:bg-blue-600"
-            >
-              + Nueva Transacción
-            </button>
-          }
-        />
+        <TransactionList onTransactionChange={handleTransactionChange} />
       </main>
     </div>
   );
