@@ -17,37 +17,38 @@ Built with Node.js, Express, Prisma ORM, and PostgreSQL following a scalable lay
 - Profile management
 
 ## 💳 Transactions
-- Create transactions
-- Update transactions
-- Delete transactions
-- Financial summaries
-- Date filtering
-- Category filtering
-- Income and expense tracking
-- CSV export support
+- Create, update, delete transactions
+- Financial summaries and date filtering
+- Category and type filtering
+- **CSV and PDF export support**
 
 ## 🗂️ Categories
 - Default categories for new users
-- Custom categories
+- Custom categories with emoji icons
 - Income and expense separation
 - Delete protection for default categories
 
+## 🤖 AI & Smart Features
+- **Smart category suggestion** based on transaction description
+- **Keyword-based categorization** (offline, no API required)
+- **Automatic financial insights** generation
+- **Monthly spending comparisons**
+- **Personalized recommendations**
+
 ## 📊 Analytics
-- Monthly summaries
-- Expense statistics
-- Financial KPIs
-- Category aggregations
+- Monthly summaries and expense statistics
+- Financial KPIs and category aggregations
 - Dashboard analytics
+- **Daily average spending calculation**
 
 ## 💰 Budgets
-- Monthly budgets
-- Budget alerts
-- Budget tracking by category
-- Expense monitoring
+- Monthly budgets with progress bars
+- Budget alerts and expense monitoring
+- Category-based budget tracking
 
 ---
 
-# ✅ Implemented Features
+## ✅ Implemented Features
 
 - ✅ Swagger/OpenAPI documentation
 - ✅ Rate limiting
@@ -62,6 +63,9 @@ Built with Node.js, Express, Prisma ORM, and PostgreSQL following a scalable lay
 - ✅ Environment configuration
 - ✅ Budget management
 - ✅ CSV export support
+- ✅ **PDF export support**
+- ✅ **AI category suggestion**
+- ✅ **Financial insights automation**
 
 ---
 
@@ -381,6 +385,23 @@ Auth Middleware Verification
 
 ---
 
+## AI
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/ai/suggest-category` | AI-powered category suggestion |
+
+---
+
+## Insights
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/insights` | Get personalized financial insights |
+
+---
+
+
 # 🗄️ Database
 
 Main entities:
@@ -426,6 +447,8 @@ Category
 - Dockerized development
 - Budget tracking and alerts
 - Export capabilities (CSV)
+- AI-powered category suggestion
+- Automated financial insights
 
 ---
 
@@ -451,13 +474,12 @@ Category
 
 # 🚢 Deployment
 
-## Recommended Backend Hosting
-- Render
-- Railway
+## Live Demo
+- **Backend API**: https://personal-finance-dashboard-backend-nsk9.onrender.com
 
-## Recommended Database Hosting
-- Neon PostgreSQL
-- Supabase PostgreSQL
-- Railway PostgreSQL
+- **Health Check**: https://personal-finance-dashboard-backend-nsk9.onrender.com/health
+
+## Database
+- **Neon PostgreSQL**: Serverless PostgreSQL database hosted on Neon.tech
 
 ---

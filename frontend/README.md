@@ -15,6 +15,7 @@ Built with React, TypeScript, Tailwind CSS, and Vite to provide a modern, respon
 - Authentication context
 - Form validation
 - Profile management
+- Password visibility toggle (show/hide password)
 
 ## 📊 Dashboard
 - Financial summary cards
@@ -50,8 +51,11 @@ Built with React, TypeScript, Tailwind CSS, and Vite to provide a modern, respon
 ## 📥 Export
 - Export all transactions to CSV
 - Export financial summary to CSV
+- Export all transactions to PDF
+- Export financial summary to PDF
 - Automatic filename with date
 - UTF-8 encoding for special characters
+- Professional PDF formatting with tables
 
 ## 🔔 User Experience
 - Toast notifications for all CRUD actions
@@ -77,11 +81,13 @@ Built with React, TypeScript, Tailwind CSS, and Vite to provide a modern, respon
 - ✅ Budget tracking with progress bars
 - ✅ Dashboard with interactive charts
 - ✅ CSV export for transactions and summary
+- ✅ **PDF export for transactions and summary**
 - ✅ Toast notifications
 - ✅ Responsive design (mobile/desktop)
 - ✅ Protected routes
 - ✅ TypeScript
 - ✅ Tailwind CSS
+- ✅ Password visibility toggle
 
 ---
 
@@ -100,6 +106,7 @@ Built with React, TypeScript, Tailwind CSS, and Vite to provide a modern, respon
 | React Hot Toast | Notifications |
 | PapaParse | CSV export |
 | FileSaver | File download |
+| jspdf + jspdf-autotable | PDF export |
 
 ---
 
@@ -323,17 +330,15 @@ Export features include:
 - Form handling
 - Data visualization
 - Budget tracking and alerts
-- Export capabilities (CSV)
 - Toast notifications
 - Clean UI design
+- Export capabilities (CSV and PDF)
+- Password visibility toggle
 
 ---
 
 # 🚧 Future Improvements
 
-- ~~Toast notifications~~ ✅
-- ~~CSV export~~ ✅
-- ~~Budget tracking~~ ✅
 - Dark/light theme toggle
 - Global state with Zustand/Redux
 - PWA support
@@ -347,9 +352,9 @@ Export features include:
 
 # 🚢 Deployment
 
-## Recommended Platforms
-- Vercel
-- Netlify
+- **Frontend**: https://personal-finance-dashboard-jade.vercel.app
+
+
 
 ## Build Command
 
