@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Category, TransactionFormData } from '../../types';
+import CategorySuggestion from '../Categories/CategorySuggestion';
 
 interface TransactionFormProps {
   formData: TransactionFormData;
@@ -92,6 +93,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           onChange={(e) => handleChange('description', e.target.value)}
           placeholder="Ej: Supermercado"
           className="w-full rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <CategorySuggestion
+          description={formData.description}
+          amount={parseFloat(formData.amount) || 0}
+          categories={categories}
+          onSuggestion={(categoryId) => {
+            onChange({ ...formData, categoryId });  
+          }}
         />
       </div>
 

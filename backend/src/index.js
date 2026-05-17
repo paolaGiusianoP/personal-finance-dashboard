@@ -14,6 +14,7 @@ const { generalLimiter, authLimiter, writeLimiter } = require('./middlewares/rat
 const { errorHandler, notFound } = require('./middlewares/errorHandler');
 const logger = require('./utils/logger');
 const prisma = require('./utils/prisma');
+const aiRoutes = require('./routes/aiRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -66,6 +67,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/budgets', budgetRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Error handlers
 app.use(notFound);
