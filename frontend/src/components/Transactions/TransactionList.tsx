@@ -137,18 +137,6 @@ const TransactionList: React.FC<TransactionListProps> = ({
 
   return (
     <>
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-        <div>
-          <h2 className="text-3xl font-bold">Transacciones</h2>
-          <p className="text-slate-400 mt-1">Administra ingresos y gastos</p>
-        </div>
-        <button
-          onClick={() => setShowModal(true)}
-          className="rounded-2xl bg-blue-500 px-5 py-3 font-semibold text-white transition-all hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/20"
-        >
-          + Nueva Transacción
-        </button>
-      </div>
 
       {!limit && (
         <TransactionFilters

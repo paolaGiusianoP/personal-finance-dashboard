@@ -15,6 +15,7 @@ const { errorHandler, notFound } = require('./middlewares/errorHandler');
 const logger = require('./utils/logger');
 const prisma = require('./utils/prisma');
 const aiRoutes = require('./routes/aiRoutes');
+const insightsRoutes = require('./routes/insightsRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -68,6 +69,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/budgets', budgetRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/insights', insightsRoutes); 
 
 // Error handlers
 app.use(notFound);
