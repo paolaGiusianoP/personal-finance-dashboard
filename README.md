@@ -6,6 +6,14 @@ The platform allows users to manage income and expenses, analyze financial trend
 
 ---
 
+## 🌐 Live Demo
+
+- **Frontend**: https://personal-finance-dashboard-jade.vercel.app
+- **Backend API**: https://personal-finance-dashboard-backend-nsk9.onrender.com
+- **API Documentation**: https://personal-finance-dashboard-backend-nsk9.onrender.com/api-docs
+
+---
+
 ## ✨ Features
 
 ### 🔐 Authentication
@@ -28,7 +36,7 @@ The platform allows users to manage income and expenses, analyze financial trend
 - Income and expense management
 - Real-time updates
 - Date, category, and type filters
-- CSV export (transactions and summary)
+- CSV and PDF export (transactions and summary)
 
 ### 📊 Dashboard & Analytics
 - Financial KPIs (income, expenses, balance)
@@ -36,6 +44,12 @@ The platform allows users to manage income and expenses, analyze financial trend
 - Monthly trends
 - Expense distribution by category
 - Period filters (week/month/year)
+
+### 🤖 AI & Smart Features
+- Smart category suggestion based on transaction description
+- Automatic financial insights generation
+- Monthly spending comparisons
+- Personalized recommendations
 
 ### 🗂️ Categories
 - Custom categories with emoji icons
@@ -291,19 +305,18 @@ VITE_API_URL=http://localhost:5000/api
 
 ## 🚢 Deployment
 
-### Backend Deployment (Railway/Render)
+### Live URLs
+- **Frontend**: https://personal-finance-dashboard-jade.vercel.app
+- **Backend API**: https://personal-finance-dashboard-backend-nsk9.onrender.com
+- **API Documentation**: https://personal-finance-dashboard-backend-nsk9.onrender.com/api-docs
 
-1. Push code to GitHub
-2. Connect repository to Railway/Render
-3. Add environment variables
-4. Deploy
+### Backend Deployment (Render)
+- Currently deployed on Render.com
+- Database hosted on Neon.tech (PostgreSQL)
 
-### Frontend Deployment (Vercel/Netlify)
-
-1. Push code to GitHub
-2. Connect repository to Vercel/Netlify
-3. Set environment variable: `VITE_API_URL`
-4. Deploy
+### Frontend Deployment (Vercel)
+- Currently deployed on Vercel
+- Automatically deploys from GitHub main branch
 
 ---
 
@@ -323,6 +336,9 @@ VITE_API_URL=http://localhost:5000/api
 - ✅ Zod validation
 - ✅ Winston logging
 - ✅ Docker support
+- ✅ PDF export (transactions and summary)
+- ✅ AI category suggestion
+- ✅ Financial insights automation
 
 ---
 
@@ -339,24 +355,8 @@ VITE_API_URL=http://localhost:5000/api
 - Refresh tokens
 - Accessibility improvements
 
----
-
-## 📄 License
-
-MIT
 
 ---
-
-## 👩‍💻 Author
-
-Developed as part of a professional fullstack portfolio project focused on:
-
-- Clean architecture
-- Modern API development
-- Responsive UI design
-- Data visualization
-- Security best practices
-- Professional documentation
 
 
 
