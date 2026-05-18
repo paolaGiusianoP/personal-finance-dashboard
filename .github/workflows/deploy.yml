@@ -21,11 +21,8 @@ jobs:
           cd frontend
           npm ci
       
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-          working-directory: ./frontend
+      - name: Install and run Vercel CLI
+        run: |
+          cd frontend
+          npm i -g vercel@latest
+          vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
