@@ -9,15 +9,15 @@ vi.mock('../../../services/api', () => ({
 }));
 
 describe('Transactions Page', () => {
-  it('debería renderizar la página de transacciones', () => {
+  it('debería renderizar el título de la página', () => {
     render(<Transactions />);
     
-    expect(screen.getAllByText(/transacciones/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Administra ingresos y gastos/i)).toBeDefined();
   });
 
-  it('debería mostrar el botón de exportar', () => {
+  it('debería mostrar el botón + Nueva Transacción', () => {
     render(<Transactions />);
     
-    expect(screen.getByText(/exportar/i)).toBeDefined();
+    expect(screen.getByText(/nueva transacción/i)).toBeDefined();
   });
 });

@@ -5,15 +5,10 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: 'jsdom', 
-    setupFiles: ['./src/test/setup.ts'],
+    environment: 'jsdom',
+    setupFiles: ['./src/__tests__/setup.ts'],  
     css: true,
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'],
-    environmentOptions: {
-      jsdom: {
-        resources: 'usable',
-      },
-    },
+    include: ['src/**/*.test.tsx', 'src/**/*.test.ts'],
+    exclude: ['node_modules', 'dist'],
   },
 });

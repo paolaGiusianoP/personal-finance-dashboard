@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '../utils/test-utils';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '../utils/test-utils';
 import TransactionList from '../../components/Transactions/TransactionList';
 
 vi.mock('../../services/api', () => ({
@@ -12,15 +12,16 @@ vi.mock('../../services/api', () => ({
 }));
 
 describe('TransactionList Component', () => {
-  it('debería renderizar el título de transacciones', () => {
+  it('debería renderizar los filtros', () => {
     render(<TransactionList onTransactionChange={() => {}} />);
     
-    expect(screen.getAllByText(/transacciones/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/todos los tipos/i)).toBeDefined();
+    expect(screen.getByText(/todas las categorías/i)).toBeDefined();
   });
 
-  it('debería mostrar el botón de nueva transacción', () => {
+  it('debería mostrar el botón de limpiar filtros', () => {
     render(<TransactionList onTransactionChange={() => {}} />);
     
-    expect(screen.getByText(/nueva transacción/i)).toBeDefined();
+    expect(screen.getByText(/limpiar filtros/i)).toBeDefined();
   });
 });
