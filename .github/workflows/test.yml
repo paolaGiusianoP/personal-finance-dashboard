@@ -38,6 +38,11 @@ jobs:
       - name: Generate Prisma client
         run: cd backend && npx prisma generate
         
+      - name: Run Prisma migrations
+        run: cd backend && npx prisma migrate deploy
+        env:
+          DATABASE_URL: postgresql://postgres:postgres123@localhost:5432/test_db
+        
       - name: Run backend tests
         run: cd backend && npm run test
         env:
