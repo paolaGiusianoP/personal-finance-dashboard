@@ -4,43 +4,52 @@ const app = require('../../index');
 describe('Budgets Endpoints', () => {
   let authToken = '';
   let categoryId = '';
+
   const month = new Date().getMonth() + 1;
   const year = new Date().getFullYear();
 
   beforeAll(async () => {
-    // Crear usuario de prueba
     const testEmail = `budget_${Date.now()}@example.com`;
-    
-    await request(app)
+
+    const registerRes = await request(app)
       .post('/api/auth/register')
       .send({
         email: testEmail,
         password: '123456',
         name: 'Budget User'
       });
-    
+
+    console.log('REGISTER:', registerRes.status, registerRes.body);
+
     const loginRes = await request(app)
       .post('/api/auth/login')
       .send({
         email: testEmail,
         password: '123456'
       });
-    
-    authToken = loginRes.body.token;
 
-    // Crear categoría de prueba para el presupuesto
+    console.log('LOGIN:', loginRes.status, loginRes.body);
+
+    authToken =
+      loginRes.body.token ||
+      loginRes.body.data?.token;
+
+    console.log('TOKEN:', authToken);
+
     const categoryRes = await request(app)
       .post('/api/categories')
       .set('Authorization', `Bearer ${authToken}`)
       .send({
-        name: 'Budget Category',
+        name: `Budget Category ${Date.now()}`,
         type: 'expense',
         icon: '💰'
       });
-    
-    if (categoryRes.body.data?.id) {
-      categoryId = categoryRes.body.data.id;
-    }
+
+
+    categoryId =
+      categoryRes.body.data?.id ||
+      categoryRes.body.id;
+
   });
 
   describe('POST /api/budgets', () => {
@@ -54,13 +63,14 @@ describe('Budgets Endpoints', () => {
         .post('/api/budgets')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
-          categoryId: categoryId,
+          categoryId,
           amount: 500,
           month,
           year
         });
 
-      expect([200, 201, 400, 500]).toContain(response.status);
+
+      expect([200, 201, 400]).toContain(response.status);
     });
   });
 
@@ -70,7 +80,8 @@ describe('Budgets Endpoints', () => {
         .get(`/api/budgets?month=${month}&year=${year}`)
         .set('Authorization', `Bearer ${authToken}`);
 
-      expect([200, 404, 500]).toContain(response.status);
+
+      expect([200, 404]).toContain(response.status);
     });
   });
 
@@ -80,7 +91,7 @@ describe('Budgets Endpoints', () => {
         .get(`/api/budgets/alerts?month=${month}&year=${year}`)
         .set('Authorization', `Bearer ${authToken}`);
 
-      expect([200, 404, 500]).toContain(response.status);
+      expect([200, 404]).toContain(response.status);
     });
   });
 });
