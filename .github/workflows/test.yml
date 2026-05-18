@@ -38,8 +38,11 @@ jobs:
       - name: Generate Prisma client
         run: cd backend && npx prisma generate
         
-      - name: Run Prisma migrations
-        run: cd backend && npx prisma migrate deploy
+      - name: Wait for PostgreSQL
+        run: sleep 5
+        
+      - name: Setup database schema
+        run: cd backend && npx prisma db push --force-reset
         env:
           DATABASE_URL: postgresql://postgres:postgres123@localhost:5432/test_db
         
@@ -49,6 +52,7 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres123@localhost:5432/test_db
           JWT_SECRET: test_secret_key
           NODE_ENV: test
+          NODE_OPTIONS: --max-old-space-size=4096
 
   test-frontend:
     runs-on: ubuntu-latest
