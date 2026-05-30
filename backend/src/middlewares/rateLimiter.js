@@ -2,7 +2,7 @@ const rateLimit = require('express-rate-limit');
 
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, 
-  max: 100, 
+  max: 10000,
   message: {
     success: false,
     error: 'Demasiadas solicitudes, por favor intenta más tarde',
@@ -13,7 +13,7 @@ const generalLimiter = rateLimit({
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, 
-  max: 5, 
+  max: 10000,
   message: {
     success: false,
     error: 'Demasiados intentos de inicio de sesión, intenta más tarde',
@@ -23,7 +23,7 @@ const authLimiter = rateLimit({
 
 const writeLimiter = rateLimit({
   windowMs: 60 * 1000, 
-  max: 30, 
+  max: 1000,
   message: {
     success: false,
     error: 'Demasiadas operaciones, espera un momento',
